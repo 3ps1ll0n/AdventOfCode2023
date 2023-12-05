@@ -35,7 +35,7 @@ dVector<int> strToIntForVector(dVector<std::string> vectorToConvert){
     dVector<int> convertedVector = {};
 
     for(std::string line : vectorToConvert){
-        std::cout << line << std::endl;
+        //std::cout << line << std::endl;
         convertedVector.push_back(std::stoi(line));
     }
 
