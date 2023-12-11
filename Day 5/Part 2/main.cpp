@@ -7,20 +7,25 @@
 #include "function.hpp"
 #include "Converter.hpp"
 
-long long calculateSmalest(std::vector<long long> seedSet, int seedPos, Converter& converter){
+long long calculateSmalest(std::vector<long long> seedSet, Converter* converter){
     std::vector<long long> allSeeds = {};
-    std::vector<std::string> keys = converter.getKeys();
+    std::vector<Range*> ranges = {};
+    std::vector<std::string> keys = converter->getKeys();
+    std::vector<Range*> temp = {};
     
-    for(int j = 0; j < seedSet.at(seedPos+1); j++){
-        allSeeds.push_back(seedSet.at(seedPos) + j);
+    for(int j = 0; j < seedSet.size(); j+=2){
+        ranges.push_back(new Range(seedSet.at(j), seedSet.at(j) + seedSet.at(j + 1), seedSet.at(j+1)));
     }
     for(auto key : keys){
+        temp = {};
         std::cout << key << std::endl;
-        for(int i = 0; i < allSeeds.size(); i++){
-            allSeeds.at(i) = converter.convert(key, allSeeds.at(i));
-        }
+        std::cout << ranges.size() << std::endl;
+        append(&temp, converter->generateRangefromeRanges(ranges, key));
+        ranges = temp;
+        //std::cout << converter->getBeginValueOfRanges(ranges) << std::endl;
     }
-    return displaySmaller(allSeeds);
+    ranges = temp;
+    return displaySmaller(converter->getBeginValueOfRanges(ranges));
 }
 
 int main(){
@@ -34,4 +39,6 @@ int main(){
 
     std::vector<long long> seeds = strToIntForVector(split(seedLine, " "));
     std::vector<long long> lowestSeeds = {};
+
+    std::cout << calculateSmalest(seeds, &converter) << std::endl;
 }

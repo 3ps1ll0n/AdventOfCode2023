@@ -21,6 +21,8 @@ public:
     long long convert(std::string map, long long valueToConvert);
     std::vector<std::string> getKeys();
     int getLowerRange(std::string map);
+    std::vector<Range*> generateRangefromeRanges(std::vector<Range*> allRanges, std::string map);
+    std::vector<long long> getBeginValueOfRanges(std::vector<Range*> allRanges);
 };
 
 Converter::Converter()
@@ -71,4 +73,40 @@ long long Converter::convert(std::string map, long long valueToConvert){
 
 std::vector<std::string> Converter::getKeys(){
     return keys;
+}
+
+std::vector<Range*> Converter::generateRangefromeRanges(std::vector<Range*> allRanges, std::string map){
+    if(allRange.find(map) == allRange.end()){
+        std::cout << "Can't find the map" << std::endl;
+        return {};
+    } 
+
+    std::vector<Range*> rangesToCompare = allRange.find(map)->second;
+    std::vector<Range*> newRanges = {};
+
+    for(Range* formerRange : allRanges){
+        bool asAlreadyBeenReturn = false;
+        for(int i = 0; i < rangesToCompare.size(); i++){
+            Range* comparRange = rangesToCompare.at(i);
+            std::vector<Range*> t = comparRange->generateRangeFromRange(formerRange);
+            if ((t.size() == 1 && t.at(0)->getBegin() != formerRange->getBegin()) || t.size() >= 2){
+                append(&newRanges, t);
+                break;
+            } else if( i == rangesToCompare.size() - 1) newRanges.push_back(formerRange);
+            
+        }
+    }
+    return newRanges;
+}
+
+std::vector<long long> Converter::getBeginValueOfRanges(std::vector<Range*> allRanges){
+    std::vector<long long> beginValues = {};
+
+    std::cout << allRanges.size() << std::endl;
+
+    for(auto range : allRanges){
+        beginValues.push_back(range->getBegin());
+    }
+
+    return beginValues;
 }

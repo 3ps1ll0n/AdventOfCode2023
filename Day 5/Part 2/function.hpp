@@ -26,11 +26,17 @@ dVector<long long> strToIntForVector(dVector<std::string> vectorToConvert){
     dVector<long long> convertedVector = {};
 
     for(std::string line : vectorToConvert){
-        //std::cout << line << std::endl;
         convertedVector.push_back(std::stoll(line));
     }
 
     return convertedVector;
+}
+
+template <class T>
+void append(std::vector<T>* iniVector, const std::vector<T> toAddVector){
+    for(T element : toAddVector){
+        iniVector->push_back(element);
+    }
 }
 
 template <class T>
@@ -47,6 +53,8 @@ std::ostream& operator<<(std::ostream& os, std::vector<T> vector){
 
 long long displaySmaller(std::vector<long long> v){
     long long smallest = LLONG_MAX;
+
+    //std::cout << v << std::endl;
 
     for(auto nbre : v){
         if(nbre < smallest) smallest = nbre;
